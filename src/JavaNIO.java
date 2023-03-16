@@ -37,11 +37,14 @@ public class JavaNIO {
         while (bytesRead != -1) {
             message = "Read " + bytesRead + " bytes. Read string is: ";
             System.out.print("\n" + message);
-            list.add(message);
             buf.flip();
+            StringBuilder stringBuilder = new StringBuilder();
             while (buf.hasRemaining()) {
-                System.out.print((char) buf.get());
+                char c = (char) buf.get();
+                stringBuilder.append(c);
+                System.out.print(c);
             }
+            list.add(message + stringBuilder);
             buf.clear();
             bytesRead = inChannel.read(buf);
         }
