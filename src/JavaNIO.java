@@ -5,19 +5,28 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaNIO {
 
-    public void tryNio() throws IOException {
+    public List<String> tryNio() throws IOException {
+
+        List<String> list = new ArrayList<>();
+        String message;
 
         File testFile;
         testFile = File.createTempFile("testFile", ".txt");
-        System.out.println("\nTemp file created: " + testFile.getAbsolutePath());
+        message = "Temp file created: " + testFile.getAbsolutePath();
+        System.out.println("\n" + message);
+        list.add(message);
 
         String str = "Some data in file";
         byte[] bs = str.getBytes();
         Path writtenFilePath = Files.write(testFile.getAbsoluteFile().toPath(), bs);
-        System.out.print("Written content: " + new String(Files.readAllBytes(writtenFilePath)));
+        message = "Written content: " + new String(Files.readAllBytes(writtenFilePath));
+        System.out.print(message);
+        list.add(message);
 
         RandomAccessFile aFile = new RandomAccessFile(testFile, "rw");
         FileChannel inChannel = aFile.getChannel();
@@ -26,7 +35,9 @@ public class JavaNIO {
         int bytesRead = inChannel.read(buf);
 
         while (bytesRead != -1) {
-            System.out.print("\nRead " + bytesRead + " bytes. Read string is: ");
+            message = "Read " + bytesRead + " bytes. Read string is: ";
+            System.out.print("\n" + message);
+            list.add(message);
             buf.flip();
             while (buf.hasRemaining()) {
                 System.out.print((char) buf.get());
@@ -36,6 +47,10 @@ public class JavaNIO {
         }
         aFile.close();
         Files.delete(testFile.getAbsoluteFile().toPath());
-        System.out.println("\nFile deleted");
+        message = "File deleted";
+        System.out.println("\n" + message);
+        list.add(message);
+
+        return list;
     }
 }
